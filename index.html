@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crash Course</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <h1>Crash Course Lessons</h1>
+
+    <!-- Search and Sort -->
+    <input type="text" v-model="searchQuery" placeholder="Search lessons..." />
+    <select v-model="sortKey">
+      <option value="subject">Subject</option>
+      <option value="location">Location</option>
+      <option value="price">Price</option>
+      <option value="spaces">Spaces</option>
+    </select>
+    <button @click="toggleOrder">Toggle Order</button>
+
+    <!-- Lesson List -->
+    <div v-if="!showCart">
+      <ul>
+        <li v-for="lesson in filteredLessons" :key="lesson.id">
+          <img :src="'images/' + lesson.icon" alt="Lesson Icon" />
+          <h3>{{ lesson.subject }}</h3>
+          <p>Location: {{ lesson.location }}</p>
+          <p>Price: £{{ lesson.price }}</p>
+          <p>Spaces Left: {{ lesson.spaces }}</p>
+          <button @click="addToCart(lesson)" :disabled="lesson.spaces === 0">
+            Add to Cart
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Cart Page -->
+    <div v-else>
+      <h2>Your Cart</h2>
+      <ul>
+        <li v-for="(lesson, index) in cart" :key="index">
+          {{ lesson.subject }} - £{{ lesson.price }}
+          <button @click="removeFromCart(index)">Remove</button>
+        </li>
+      </ul>
+
+      <h3>Checkout</h3>
+      <input v-model="name" placeholder="Your Name" />
+      <input v-model="phone" placeholder="Phone Number" />
+      <button @click="checkout" :disabled="!validForm">Submit Order</button>
+      <p v-if="orderConfirmed">✅ Order submitted!</p>
+    </div>
+
+    <!-- Toggle Button -->
+    <button @click="toggleCart" :disabled="cart.length === 0">
+      {{ showCart ? 'Back to Lessons' : 'View Cart' }}
+    </button>
+  </div>
+
+  <!-- Vue and Scripts -->
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
