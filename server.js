@@ -9,7 +9,7 @@ import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb';
 import expressSession from 'express-session';
 import multer from 'multer';
 
-const port = 8080;
+const port = 3000;
 const app = express();
 const __dirname = path.resolve();
 
