@@ -5,9 +5,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb';
+import { MongoClient, MongoKerberosError, ObjectId, ServerApiVersion } from 'mongodb';
 import expressSession from 'express-session';
 import multer from 'multer';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const port = 3000;
 const app = express();
@@ -29,7 +33,7 @@ app.use(expressSession({
 // ---------------------------
 // MongoDB Setup
 // ---------------------------
-const uri = "mongodb://localhost:27017"; // change to your Atlas URI if using cloud
+const uri = process.env.Mongo_URI; //from .env file
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -47,7 +51,7 @@ async function connectDB() {
     db = client.db("afterSchoolDB");
     lessonsCollection = db.collection("lessons");
     ordersCollection = db.collection("orders");
-    console.log("✅ Connected to MongoDB");
+    console.log("✅ Connected to MongoDB Atlas");
   } catch (err) {
     console.error("❌ MongoDB Connection Error:", err);
     process.exit(1);
@@ -124,5 +128,5 @@ app.get('/', (req, res) => {
 // Start Server
 // ---------------------------
 app.listen(port, () => {
-  console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
